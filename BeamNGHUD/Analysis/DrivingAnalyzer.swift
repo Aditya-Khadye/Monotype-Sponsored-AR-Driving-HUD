@@ -232,6 +232,6 @@ actor DrivingAnalyzer {
 
     private func canFire(_ type: DrivingEvent.EventType, at time: UInt64) -> Bool {
         guard let lastFired = eventCooldowns[type] else { return true }
-        return time - lastFired >= cooldownMs
+        return time >= lastFired && (time - lastFired) >= cooldownMs
     }
 }

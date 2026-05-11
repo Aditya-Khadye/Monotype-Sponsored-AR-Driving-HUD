@@ -2,14 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>CFBundleIdentifier</key>
+    <string>com.adityakhadye.BeamNGHUD</string>
+    <key>CFBundleName</key>
+    <string>BeamNGHUD</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
     <key>NSLocalNetworkUsageDescription</key>
     <string>BeamNG HUD receives vehicle telemetry from BeamNG.drive on your local network via UDP.</string>
-
     <key>NSBonjourServices</key>
     <array>
         <string>_beamnghud._udp</string>
     </array>
-
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>

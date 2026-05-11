@@ -2,15 +2,14 @@ import SwiftUI
 
 struct ControlPanelView: View {
 
-    @EnvironmentObject var receiver: UDPReceiver
-    @EnvironmentObject var session: SessionManager
+    @EnvironmentObject var receiver:   UDPReceiver
+    @EnvironmentObject var session:    SessionManager
+    @EnvironmentObject var visibility: HUDVisibility
 
-    @Binding var immersiveSpaceOpen: Bool
+    @Environment(\.openWindow) var openWindow
 
-    @Environment(\.openImmersiveSpace) var openImmersiveSpace
-    @Environment(\.dismissImmersiveSpace) var dismissImmersiveSpace
-
-    @State private var macMiniIP: String = "192.168.1.XXX"
+    @State private var macMiniIP: String = "192.168.50.202"
+    @State private var hudOpen = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -32,22 +31,14 @@ struct ControlPanelView: View {
 
             ScrollView {
                 VStack(spacing: 16) {
-
-                    // ── HUD toggle ────────────────────────────
                     hudToggleSection
-
-                    // ── Connection section ────────────────────
                     connectionSection
-
-                    // ── Session controls ──────────────────────
                     sessionSection
+                    visibilitySection
 
-                    // ── Live telemetry ────────────────────────
                     if let pkt = receiver.latest {
                         telemetrySection(pkt)
                     }
-
-                    // ── Analysis feed ─────────────────────────
                     if let event = session.latestAnalysis {
                         analysisSection(event)
                     }
@@ -56,11 +47,6 @@ struct ControlPanelView: View {
             }
         }
         .frame(width: 420)
-        .onChange(of: receiver.latest) { _, newPacket in
-            if let pkt = newPacket {
-                session.ingestPacket(pkt)
-            }
-        }
     }
 
     // ── HUD toggle ───────────────────────────────────────────
@@ -69,9 +55,9 @@ struct ControlPanelView: View {
         VStack(spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("World-anchored HUD")
+                    Text("Floating HUD Window")
                         .font(.callout.weight(.semibold))
-                    Text("Floats 1.5m ahead · fixed in space · runs alongside Moonlight")
+                    Text("Grab the bar at the bottom to move it anywhere · place next to Moonlight")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -79,32 +65,21 @@ struct ControlPanelView: View {
             }
 
             Button {
-                Task {
-                    if immersiveSpaceOpen {
-                        await dismissImmersiveSpace()
-                        immersiveSpaceOpen = false
-                    } else {
-                        await openImmersiveSpace(id: "SpeedHUD")
-                        immersiveSpaceOpen = true
-                    }
-                }
+                openWindow(id: "hud")
+                hudOpen = true
             } label: {
-                Label(
-                    immersiveSpaceOpen ? "Close HUD" : "Open HUD in Space",
-                    systemImage: immersiveSpaceOpen
-                        ? "xmark.circle" : "vision.pro"
-                )
-                .frame(maxWidth: .infinity)
+                Label("Open HUD Window", systemImage: "vision.pro")
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .tint(immersiveSpaceOpen ? .secondary : .blue)
+            .tint(.blue)
 
-            if immersiveSpaceOpen {
+            if hudOpen {
                 HStack(spacing: 6) {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(.green)
                         .font(.system(size: 12))
-                    Text("HUD is live in your space — open Moonlight alongside it")
+                    Text("HUD is open — grab the bottom bar to reposition it")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -150,14 +125,12 @@ struct ControlPanelView: View {
                 Circle()
                     .fill(session.streamer.isConnected ? .green : .orange)
                     .frame(width: 7, height: 7)
-                Text(session.streamer.isConnected
-                     ? "Streaming to Mac Mini"
-                     : "Not connected")
+                Text(session.streamer.isConnected ? "Streaming to Mac Mini" : "Not connected")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
                 if session.streamer.isConnected {
-                    Text("\(session.streamer.recordsSent) records sent")
+                    Text("\(session.streamer.recordsSent) sent")
                         .font(.caption.monospacedDigit())
                         .foregroundStyle(.tertiary)
                 }
@@ -190,6 +163,7 @@ struct ControlPanelView: View {
                     session.startSession()
                 } label: {
                     Label("Start", systemImage: "record.circle")
+                        .frame(minWidth: 70)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.red)
@@ -199,6 +173,7 @@ struct ControlPanelView: View {
                     session.stopSession()
                 } label: {
                     Label("Stop", systemImage: "stop.circle")
+                        .frame(minWidth: 70)
                 }
                 .buttonStyle(.bordered)
                 .disabled(!session.isRecording)
@@ -209,6 +184,7 @@ struct ControlPanelView: View {
                     session.addMarker(label: "USER_MARK")
                 } label: {
                     Label("Mark", systemImage: "flag")
+                        .frame(minWidth: 70)
                 }
                 .buttonStyle(.bordered)
                 .disabled(!session.isRecording)
@@ -231,21 +207,68 @@ struct ControlPanelView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
 
+    // ── Visibility controls ──────────────────────────────────
+
+    private var visibilitySection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("HUD Elements", systemImage: "slider.horizontal.3")
+                .font(.subheadline.weight(.semibold))
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(HUDVisibility.Preset.allCases, id: \.self) { preset in
+                        Button(preset.rawValue) {
+                            withAnimation { visibility.preset(preset) }
+                        }
+                        .buttonStyle(.bordered)
+                        .font(.caption)
+                    }
+                }
+            }
+
+            Divider()
+
+            Toggle(isOn: $visibility.showPanel) {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Panel background")
+                        .font(.callout)
+                    Text("Off = floating elements against passthrough")
+                        .font(.caption2).foregroundStyle(.tertiary)
+                }
+            }
+
+            let columns = [GridItem(.flexible()), GridItem(.flexible())]
+            LazyVGrid(columns: columns, spacing: 8) {
+                Toggle("Speed",    isOn: $visibility.showSpeed)
+                Toggle("Gear",     isOn: $visibility.showGear)
+                Toggle("RPM",      isOn: $visibility.showRPM)
+                Toggle("Throttle", isOn: $visibility.showThrottle)
+                Toggle("Brake",    isOn: $visibility.showBrake)
+                Toggle("Fuel",     isOn: $visibility.showFuel)
+                Toggle("Flags",    isOn: $visibility.showFlags)
+                Toggle("Temps",    isOn: $visibility.showTemps)
+                Toggle("Status",   isOn: $visibility.showStatus)
+            }
+            .font(.callout)
+        }
+        .padding(16)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+    }
+
     // ── Live telemetry ───────────────────────────────────────
 
     private func telemetrySection(_ pkt: OutGaugePacket) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Label("Live", systemImage: "speedometer")
                 .font(.subheadline.weight(.semibold))
-
             HStack(spacing: 0) {
-                miniStat("Speed",   String(format: "%.0f", pkt.speedKMH), "km/h")
+                miniStat("Speed", String(format: "%.0f", pkt.speedKMH), "km/h")
                 Spacer()
-                miniStat("RPM",     String(format: "%.0f", pkt.rpm),      "")
+                miniStat("RPM",   String(format: "%.0f", pkt.rpm), "")
                 Spacer()
-                miniStat("Gear",    pkt.gearLabel,                        "")
+                miniStat("Gear",  pkt.gearLabel, "")
                 Spacer()
-                miniStat("Fuel",    String(format: "%.0f%%", pkt.fuel * 100), "")
+                miniStat("Fuel",  String(format: "%.0f%%", pkt.fuel * 100), "")
             }
         }
         .padding(16)
@@ -262,9 +285,7 @@ struct ControlPanelView: View {
                     .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .monospacedDigit()
                 if !unit.isEmpty {
-                    Text(unit)
-                        .font(.system(size: 10))
-                        .foregroundStyle(.secondary)
+                    Text(unit).font(.system(size: 10)).foregroundStyle(.secondary)
                 }
             }
         }
@@ -274,76 +295,14 @@ struct ControlPanelView: View {
 
     private func analysisSection(_ event: DrivingAnalyzer.DrivingEvent) -> some View {
         HStack(spacing: 12) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(.orange)
+            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
             VStack(alignment: .leading, spacing: 2) {
                 Text(event.type.rawValue.replacingOccurrences(of: "_", with: " "))
                     .font(.callout.weight(.medium))
                 Text(String(format: "Confidence %.0f%%", event.confidence * 100))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.caption).foregroundStyle(.secondary)
             }
             Spacer()
-        }
-        .padding(16)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-    }
-}
-
-// MARK: - HUD Visibility section (append to ControlPanelView body)
-// Add this section inside the ScrollView VStack in ControlPanelView,
-// after hudToggleSection:
-
-struct HUDVisibilitySection: View {
-    @EnvironmentObject var vis: HUDVisibility
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Label("HUD Elements", systemImage: "slider.horizontal.3")
-                .font(.subheadline.weight(.semibold))
-
-            // ── Presets ───────────────────────────────────────
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(HUDVisibility.Preset.allCases, id: \.self) { preset in
-                        Button(preset.rawValue) {
-                            withAnimation { vis.preset(preset) }
-                        }
-                        .buttonStyle(.bordered)
-                        .font(.caption)
-                    }
-                }
-            }
-
-            Divider()
-
-            // ── Panel toggle ──────────────────────────────────
-            Toggle(isOn: $vis.showPanel) {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text("Panel background")
-                        .font(.callout)
-                    Text("Off = floating elements with passthrough backplates")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
-            }
-
-            Divider()
-
-            // ── Per-element toggles ───────────────────────────
-            let columns = [GridItem(.flexible()), GridItem(.flexible())]
-            LazyVGrid(columns: columns, spacing: 8) {
-                Toggle("Speed",    isOn: $vis.showSpeed)
-                Toggle("Gear",     isOn: $vis.showGear)
-                Toggle("RPM",      isOn: $vis.showRPM)
-                Toggle("Throttle", isOn: $vis.showThrottle)
-                Toggle("Brake",    isOn: $vis.showBrake)
-                Toggle("Fuel",     isOn: $vis.showFuel)
-                Toggle("Flags",    isOn: $vis.showFlags)
-                Toggle("Temps",    isOn: $vis.showTemps)
-                Toggle("Status",   isOn: $vis.showStatus)
-            }
-            .font(.callout)
         }
         .padding(16)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))

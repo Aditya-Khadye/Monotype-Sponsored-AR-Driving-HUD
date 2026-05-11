@@ -3,75 +3,259 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 56;
 	objects = {
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		BED996082F999ABF002CE613 /* BeamNGHUD */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BeamNGHUD;
-			sourceTree = "<group>";
+/* Begin PBXBuildFile section */
+		1E42D913167CE0B88F39B699 /* HUDTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3758068A891B4E431C970D02 /* HUDTokens.swift */; };
+		4224FA20DDDE187BBFD89A12 /* TelemetryRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = B913060D242CF51CB26E4ECB /* TelemetryRecord.swift */; };
+		43D1260AC20872A795F8E913 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDB202985F1484FA737F993 /* SessionManager.swift */; };
+		62B67D1A28128D2E3306D487 /* UDPReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816353D9B510DFB749432E87 /* UDPReceiver.swift */; };
+		64FAA0992E5DFE9D137D80DC /* NetworkStreamer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617C36DA735DF51DEAAB22EC /* NetworkStreamer.swift */; };
+		6F627E377AB7B2121259DACC /* DrivingAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A002EA17CB8647E98B773466 /* DrivingAnalyzer.swift */; };
+		8899630B5D184822BC611CFF /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57120AB83DBEE925FE48E883 /* RingBuffer.swift */; };
+		9E6B77535D6AA40C8E2CD66B /* OutGaugePacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7397D832EF1028035D526 /* OutGaugePacket.swift */; };
+		B638A844AAFAB3BB96B75C59 /* SessionClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FC1448E999A2887783F167 /* SessionClock.swift */; };
+		BA82B9790667B9C9431B3899 /* ControlPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1DB9B3054EF15E91F52747 /* ControlPanelView.swift */; };
+		BE2582332FA01ACC0002F484 /* HUDWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2582322FA01ACC0002F484 /* HUDWindowView.swift */; };
+		C9E42998FDFB39DF80FE4055 /* BeamNGHUDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748851A52C05846A99D5B8E1 /* BeamNGHUDApp.swift */; };
+		DE6D435193BD239BC4D33324 /* SpeedHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC296D78E799D937A45DCB /* SpeedHUDView.swift */; };
+		EF83E5BFCDC66D77E799FEEE /* HUDVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749856C3B1757090BCA2F2A9 /* HUDVisibility.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		02F6383B5645A6D0C3902347 /* BeamNGHUD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BeamNGHUD.entitlements; sourceTree = "<group>"; };
+		15F4A4D7E9671EB775ED60F3 /* BeamNGHUD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeamNGHUD.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FD7397D832EF1028035D526 /* OutGaugePacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutGaugePacket.swift; sourceTree = "<group>"; };
+		32DC296D78E799D937A45DCB /* SpeedHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedHUDView.swift; sourceTree = "<group>"; };
+		3758068A891B4E431C970D02 /* HUDTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDTokens.swift; sourceTree = "<group>"; };
+		57120AB83DBEE925FE48E883 /* RingBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingBuffer.swift; sourceTree = "<group>"; };
+		617C36DA735DF51DEAAB22EC /* NetworkStreamer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStreamer.swift; sourceTree = "<group>"; };
+		748851A52C05846A99D5B8E1 /* BeamNGHUDApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeamNGHUDApp.swift; sourceTree = "<group>"; };
+		749856C3B1757090BCA2F2A9 /* HUDVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDVisibility.swift; sourceTree = "<group>"; };
+		816353D9B510DFB749432E87 /* UDPReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDPReceiver.swift; sourceTree = "<group>"; };
+		A002EA17CB8647E98B773466 /* DrivingAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivingAnalyzer.swift; sourceTree = "<group>"; };
+		AA1DB9B3054EF15E91F52747 /* ControlPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlPanelView.swift; sourceTree = "<group>"; };
+		B913060D242CF51CB26E4ECB /* TelemetryRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryRecord.swift; sourceTree = "<group>"; };
+		BE2582322FA01ACC0002F484 /* HUDWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDWindowView.swift; sourceTree = "<group>"; };
+		BE395ACA2FA01A1500A532E1 /* HUDWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDWindowView.swift; sourceTree = "<group>"; };
+		CEDB202985F1484FA737F993 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		E684FED003B5CF95767AA0F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E6FC1448E999A2887783F167 /* SessionClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionClock.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0ACC1C530E7959471103603E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXFileSystemSynchronizedRootGroup section */
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BED995FD2F999ABF002CE613 = {
+		281650DC4853A6F537FF42C3 /* DataCollection */ = {
 			isa = PBXGroup;
 			children = (
-				BED996082F999ABF002CE613 /* BeamNGHUD */,
-				BED996092F999ABF002CE613 /* Packages */,
-				BED996072F999ABF002CE613 /* Products */,
+				617C36DA735DF51DEAAB22EC /* NetworkStreamer.swift */,
+				57120AB83DBEE925FE48E883 /* RingBuffer.swift */,
+				E6FC1448E999A2887783F167 /* SessionClock.swift */,
+				CEDB202985F1484FA737F993 /* SessionManager.swift */,
+				B913060D242CF51CB26E4ECB /* TelemetryRecord.swift */,
 			);
+			path = DataCollection;
 			sourceTree = "<group>";
 		};
-		BED996072F999ABF002CE613 /* Products */ = {
+		45C46B05DA336B7E412DB0DD /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				15F4A4D7E9671EB775ED60F3 /* BeamNGHUD.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BED996092F999ABF002CE613 /* Packages */ = {
+		65D322558C2176E1AB3966A4 /* BeamNGHUD */ = {
 			isa = PBXGroup;
 			children = (
+				748851A52C05846A99D5B8E1 /* BeamNGHUDApp.swift */,
+				AA1DB9B3054EF15E91F52747 /* ControlPanelView.swift */,
+				3758068A891B4E431C970D02 /* HUDTokens.swift */,
+				749856C3B1757090BCA2F2A9 /* HUDVisibility.swift */,
+				2FD7397D832EF1028035D526 /* OutGaugePacket.swift */,
+				32DC296D78E799D937A45DCB /* SpeedHUDView.swift */,
+				816353D9B510DFB749432E87 /* UDPReceiver.swift */,
+				BE2582322FA01ACC0002F484 /* HUDWindowView.swift */,
+				281650DC4853A6F537FF42C3 /* DataCollection */,
+				85AACB714E2C7C9688F96882 /* Analysis */,
+				E684FED003B5CF95767AA0F6 /* Info.plist */,
+				02F6383B5645A6D0C3902347 /* BeamNGHUD.entitlements */,
 			);
-			path = Packages;
+			path = BeamNGHUD;
+			sourceTree = "<group>";
+		};
+		85AACB714E2C7C9688F96882 /* Analysis */ = {
+			isa = PBXGroup;
+			children = (
+				A002EA17CB8647E98B773466 /* DrivingAnalyzer.swift */,
+			);
+			path = Analysis;
+			sourceTree = "<group>";
+		};
+		A49E5BF86256BB6F436360D7 = {
+			isa = PBXGroup;
+			children = (
+				BE395ACA2FA01A1500A532E1 /* HUDWindowView.swift */,
+				65D322558C2176E1AB3966A4 /* BeamNGHUD */,
+				45C46B05DA336B7E412DB0DD /* Products */,
+			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
+/* Begin PBXNativeTarget section */
+		36159EA9089F0EFA90619649 /* BeamNGHUD */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D04D74BA7A124C8C2EE313C0 /* Build configuration list for PBXNativeTarget "BeamNGHUD" */;
+			buildPhases = (
+				674BFB42F2202A9D89315ADC /* Sources */,
+				0ACC1C530E7959471103603E /* Frameworks */,
+				3EDD20D0DA2DFEF43C6706D4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BeamNGHUD;
+			productName = BeamNGHUD;
+			productReference = 15F4A4D7E9671EB775ED60F3 /* BeamNGHUD.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
 /* Begin PBXProject section */
-		BED995FE2F999ABF002CE613 /* Project object */ = {
+		4FC749BF26D7392D7466390D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2640;
+				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 2640;
+				TargetAttributes = {
+					36159EA9089F0EFA90619649 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
 			};
-			buildConfigurationList = BED996012F999ABF002CE613 /* Build configuration list for PBXProject "BeamNGHUD" */;
+			buildConfigurationList = 60F8955E7DB281786D26B067 /* Build configuration list for PBXProject "BeamNGHUD" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = BED995FD2F999ABF002CE613;
-			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
-			productRefGroup = BED996072F999ABF002CE613 /* Products */;
+			mainGroup = A49E5BF86256BB6F436360D7;
+			productRefGroup = 45C46B05DA336B7E412DB0DD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				36159EA9089F0EFA90619649 /* BeamNGHUD */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		3EDD20D0DA2DFEF43C6706D4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		674BFB42F2202A9D89315ADC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9E42998FDFB39DF80FE4055 /* BeamNGHUDApp.swift in Sources */,
+				BA82B9790667B9C9431B3899 /* ControlPanelView.swift in Sources */,
+				1E42D913167CE0B88F39B699 /* HUDTokens.swift in Sources */,
+				EF83E5BFCDC66D77E799FEEE /* HUDVisibility.swift in Sources */,
+				9E6B77535D6AA40C8E2CD66B /* OutGaugePacket.swift in Sources */,
+				DE6D435193BD239BC4D33324 /* SpeedHUDView.swift in Sources */,
+				BE2582332FA01ACC0002F484 /* HUDWindowView.swift in Sources */,
+				62B67D1A28128D2E3306D487 /* UDPReceiver.swift in Sources */,
+				64FAA0992E5DFE9D137D80DC /* NetworkStreamer.swift in Sources */,
+				8899630B5D184822BC611CFF /* RingBuffer.swift in Sources */,
+				B638A844AAFAB3BB96B75C59 /* SessionClock.swift in Sources */,
+				43D1260AC20872A795F8E913 /* SessionManager.swift in Sources */,
+				4224FA20DDDE187BBFD89A12 /* TelemetryRecord.swift in Sources */,
+				6F627E377AB7B2121259DACC /* DrivingAnalyzer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
 /* Begin XCBuildConfiguration section */
-		BED9961A2F999AC0002CE613 /* Debug */ = {
+		22B2DDCD1CA7398545AF24C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSTCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BeamNGHUD/BeamNGHUD.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BeamNGHUD/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adityakhadye.BeamNGHUD;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = xros;
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 7;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Release;
+		};
+		26A28085EE241F3F2BC9FC05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = KQ4FJA46RD;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_FAST_MATH = YES;
+				SDKROOT = xros;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		65CD467CC9E073BD21294DDF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -120,87 +304,64 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = xros;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				XROS_DEPLOYMENT_TARGET = 26.4;
 			};
 			name = Debug;
 		};
-		BED9961B2F999AC0002CE613 /* Release */ = {
+		DECBC8CBBE0E204D4D2625D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = KQ4FJA46RD;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSTCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BeamNGHUD/BeamNGHUD.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BeamNGHUD/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adityakhadye.BeamNGHUD;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = xros;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
-				XROS_DEPLOYMENT_TARGET = 26.4;
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 7;
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
-			name = Release;
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BED996012F999ABF002CE613 /* Build configuration list for PBXProject "BeamNGHUD" */ = {
+		60F8955E7DB281786D26B067 /* Build configuration list for PBXProject "BeamNGHUD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BED9961A2F999AC0002CE613 /* Debug */,
-				BED9961B2F999AC0002CE613 /* Release */,
+				65CD467CC9E073BD21294DDF /* Debug */,
+				26A28085EE241F3F2BC9FC05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D04D74BA7A124C8C2EE313C0 /* Build configuration list for PBXNativeTarget "BeamNGHUD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DECBC8CBBE0E204D4D2625D4 /* Debug */,
+				22B2DDCD1CA7398545AF24C5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = BED995FE2F999ABF002CE613 /* Project object */;
+	rootObject = 4FC749BF26D7392D7466390D /* Project object */;
 }

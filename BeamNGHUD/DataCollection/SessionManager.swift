@@ -28,7 +28,7 @@ final class SessionManager: ObservableObject {
     // ── Config ───────────────────────────────────────────────
 
     /// Mac Mini IP — set before connecting
-    var macMiniIP: String = "192.168.1.XXX"
+    var macMiniIP: String = "192.168.50.202"
     var macMiniPort: UInt16 = 5555
 
     /// Auto-stop after no packets for this duration
@@ -49,19 +49,18 @@ final class SessionManager: ObservableObject {
         lastPacketTime = Date()
 
         // Connect to Mac Mini
-        streamer.connect(ip: macMiniIP, port: macMiniPort)
+        Task {
+            streamer.connect(ip: macMiniIP, port: macMiniPort)
+        }
 
         // Start duration timer
         durationTimer = Task { [weak self] in
+            var elapsed: TimeInterval = 0
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
+                elapsed += 1
                 await MainActor.run {
-                    guard let self, self.isRecording else { return }
-                    self.sessionDuration = Date().timeIntervalSince(
-                        Date(timeIntervalSince1970: 0)
-                    )
-                    // Simpler: just increment
-                    self.sessionDuration += 0
+                    self?.sessionDuration = elapsed
                 }
             }
         }
