@@ -2,14 +2,18 @@ import SwiftUI
 
 struct ControlPanelView: View {
 
-    @EnvironmentObject var receiver:   UDPReceiver
-    @EnvironmentObject var session:    SessionManager
-    @EnvironmentObject var visibility: HUDVisibility
+    @EnvironmentObject var receiver:    UDPReceiver
+    @EnvironmentObject var session:     SessionManager
+    @EnvironmentObject var visibility:  HUDVisibility
+    @EnvironmentObject var headTracker: HeadTracker
 
     @Environment(\.openWindow) var openWindow
+    @Environment(\.openImmersiveSpace) private var openImmersiveSpace
+    @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
 
     @State private var macMiniIP: String = "192.168.50.202"
     @State private var hudOpen = false
+    @State private var attentionOpen = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -34,6 +38,7 @@ struct ControlPanelView: View {
                     hudToggleSection
                     connectionSection
                     sessionSection
+                    attentionSection
                     visibilitySection
 
                     if let pkt = receiver.latest {
@@ -205,6 +210,67 @@ struct ControlPanelView: View {
         }
         .padding(16)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    // ── Attention tracking (head direction) ──────────────────
+
+    private var attentionSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Attention Tracking", systemImage: "scope")
+                .font(.subheadline.weight(.semibold))
+            Text("Head-direction only — visionOS does not expose eye gaze. Opening the tracking space hides other apps (Moonlight/PsychoPy).")
+                .font(.caption2).foregroundStyle(.tertiary)
+
+            Button {
+                Task {
+                    if attentionOpen {
+                        await dismissImmersiveSpace()
+                        attentionOpen = false
+                    } else if case .opened = await openImmersiveSpace(id: "attention") {
+                        attentionOpen = true
+                    }
+                }
+            } label: {
+                Label(attentionOpen ? "Stop Tracking Space" : "Open Tracking Space",
+                      systemImage: attentionOpen ? "stop.circle" : "scope")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.purple)
+
+            if headTracker.isTracking {
+                HStack {
+                    regionChip(headTracker.currentRegion)
+                    Spacer()
+                    Text(String(format: "yaw %.0f°  pitch %.0f°", headTracker.yawDeg, headTracker.pitchDeg))
+                        .font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                    Text("\(headTracker.dwellMs) ms")
+                        .font(.caption.monospacedDigit()).foregroundStyle(.tertiary)
+                }
+            }
+            if let err = headTracker.lastError {
+                Text(err).font(.caption2).foregroundStyle(.red)
+            }
+        }
+        .padding(16)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    private func regionChip(_ r: LookRegion) -> some View {
+        Text(r.rawValue.uppercased())
+            .font(.caption.weight(.bold))
+            .padding(.horizontal, 10).padding(.vertical, 4)
+            .background(regionColor(r).opacity(0.2), in: Capsule())
+            .foregroundStyle(regionColor(r))
+    }
+
+    private func regionColor(_ r: LookRegion) -> Color {
+        switch r {
+        case .road:     return .green
+        case .hud:      return .blue
+        case .psychopy: return .orange
+        case .other:    return .gray
+        }
     }
 
     // ── Visibility controls ──────────────────────────────────

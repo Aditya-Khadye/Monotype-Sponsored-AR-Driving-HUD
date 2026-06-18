@@ -138,6 +138,24 @@ final class SessionManager: ObservableObject {
         processRecord(record)
     }
 
+    // ── Ingest head-direction / attention sample ─────────────
+
+    /// Called by `HeadTracker` (~15 Hz) with the current head pose + region.
+    /// Pass `transition` only on the sample where the region changes.
+    func ingestHeadSample(
+        yaw: Float, pitch: Float, roll: Float,
+        region: String, dwellMs: UInt64,
+        transition: (from: String, to: String)? = nil
+    ) {
+        guard isRecording else { return }
+        let record = TelemetryRecord.headSample(
+            yaw: yaw, pitch: pitch, roll: roll,
+            region: region, dwellMs: dwellMs,
+            transition: transition, clock: clock
+        )
+        processRecord(record)
+    }
+
     // ── Internal pipeline ────────────────────────────────────
 
     private func processRecord(_ record: TelemetryRecord) {
