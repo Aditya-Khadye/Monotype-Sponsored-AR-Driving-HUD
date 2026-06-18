@@ -10,6 +10,9 @@
 		1E42D913167CE0B88F39B699 /* HUDTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3758068A891B4E431C970D02 /* HUDTokens.swift */; };
 		4224FA20DDDE187BBFD89A12 /* TelemetryRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = B913060D242CF51CB26E4ECB /* TelemetryRecord.swift */; };
 		43D1260AC20872A795F8E913 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDB202985F1484FA737F993 /* SessionManager.swift */; };
+		DDDD0001EEEE0001FFFF0001 /* LookRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAA0001BBBB0001CCCC0001 /* LookRegion.swift */; };
+		DDDD0002EEEE0002FFFF0002 /* HeadTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAA0002BBBB0002CCCC0002 /* HeadTracker.swift */; };
+		DDDD0003EEEE0003FFFF0003 /* AttentionImmersiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAA0003BBBB0003CCCC0003 /* AttentionImmersiveView.swift */; };
 		62B67D1A28128D2E3306D487 /* UDPReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816353D9B510DFB749432E87 /* UDPReceiver.swift */; };
 		64FAA0992E5DFE9D137D80DC /* NetworkStreamer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617C36DA735DF51DEAAB22EC /* NetworkStreamer.swift */; };
 		6F627E377AB7B2121259DACC /* DrivingAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A002EA17CB8647E98B773466 /* DrivingAnalyzer.swift */; };
@@ -40,6 +43,9 @@
 		BE2582322FA01ACC0002F484 /* HUDWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDWindowView.swift; sourceTree = "<group>"; };
 		BE395ACA2FA01A1500A532E1 /* HUDWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDWindowView.swift; sourceTree = "<group>"; };
 		CEDB202985F1484FA737F993 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		AAAA0001BBBB0001CCCC0001 /* LookRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookRegion.swift; sourceTree = "<group>"; };
+		AAAA0002BBBB0002CCCC0002 /* HeadTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadTracker.swift; sourceTree = "<group>"; };
+		AAAA0003BBBB0003CCCC0003 /* AttentionImmersiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttentionImmersiveView.swift; sourceTree = "<group>"; };
 		E684FED003B5CF95767AA0F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E6FC1448E999A2887783F167 /* SessionClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionClock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -55,6 +61,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1111AAAA2222BBBB3333CCCC /* Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				AAAA0001BBBB0001CCCC0001 /* LookRegion.swift */,
+				AAAA0002BBBB0002CCCC0002 /* HeadTracker.swift */,
+				AAAA0003BBBB0003CCCC0003 /* AttentionImmersiveView.swift */,
+			);
+			path = Tracking;
+			sourceTree = "<group>";
+		};
 		281650DC4853A6F537FF42C3 /* DataCollection */ = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +103,7 @@
 				816353D9B510DFB749432E87 /* UDPReceiver.swift */,
 				BE2582322FA01ACC0002F484 /* HUDWindowView.swift */,
 				281650DC4853A6F537FF42C3 /* DataCollection */,
+				1111AAAA2222BBBB3333CCCC /* Tracking */,
 				85AACB714E2C7C9688F96882 /* Analysis */,
 				E684FED003B5CF95767AA0F6 /* Info.plist */,
 				02F6383B5645A6D0C3902347 /* BeamNGHUD.entitlements */,
@@ -191,6 +208,9 @@
 				8899630B5D184822BC611CFF /* RingBuffer.swift in Sources */,
 				B638A844AAFAB3BB96B75C59 /* SessionClock.swift in Sources */,
 				43D1260AC20872A795F8E913 /* SessionManager.swift in Sources */,
+				DDDD0001EEEE0001FFFF0001 /* LookRegion.swift in Sources */,
+				DDDD0002EEEE0002FFFF0002 /* HeadTracker.swift in Sources */,
+				DDDD0003EEEE0003FFFF0003 /* AttentionImmersiveView.swift in Sources */,
 				4224FA20DDDE187BBFD89A12 /* TelemetryRecord.swift in Sources */,
 				6F627E377AB7B2121259DACC /* DrivingAnalyzer.swift in Sources */,
 			);

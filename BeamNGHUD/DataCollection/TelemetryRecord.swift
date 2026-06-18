@@ -14,7 +14,7 @@ struct TelemetryRecord: Codable, Sendable {
 
     enum DataSource: String, Codable, Sendable {
         case outgauge       // BeamNG telemetry
-        case eyeTracking    // ARKit eye tracking (future)
+        case headTracking   // Head-direction attention region (visionOS)
         case analysis       // CoreML analysis output
         case marker         // Manual event marker
     }
@@ -40,13 +40,14 @@ struct TelemetryRecord: Codable, Sendable {
     var signalRight: Bool?
     var handbrake: Bool?
 
-    // ── Eye tracking (future) ────────────────────────────────
-    var gazeX: Float?
-    var gazeY: Float?
-    var gazeZ: Float?
-    var leftPupilDilation: Float?
-    var rightPupilDilation: Float?
-    var blinkDetected: Bool?
+    // ── Head-direction attention tracking (visionOS) ─────────
+    // NOTE: visionOS does NOT expose eye gaze, pupil, or blink to apps.
+    // These are HEAD-direction derived (WorldTrackingProvider), not eye gaze.
+    var headYaw: Float?      // azimuth degrees, 0 = straight ahead, + = right
+    var headPitch: Float?    // elevation degrees, + = up
+    var headRoll: Float?     // roll degrees
+    var lookRegion: String?  // "road" | "hud" | "psychopy" | "other"
+    var dwellMs: UInt64?     // time in current region (or region just exited, on a transition)
 
     // ── Analysis flags (from CoreML) ─────────────────────────
     var analysisLabel: String?
@@ -121,6 +122,35 @@ struct TelemetryRecord: Codable, Sendable {
         return record
     }
 
+    // ── Factory: head-direction / attention sample ───────────
+
+    static func headSample(
+        yaw: Float,
+        pitch: Float,
+        roll: Float,
+        region: String,
+        dwellMs: UInt64,
+        transition: (from: String, to: String)? = nil,
+        clock: SessionClock
+    ) -> TelemetryRecord {
+        var record = TelemetryRecord(
+            timestamp: clock.now(),
+            source: .headTracking
+        )
+        record.headYaw    = yaw
+        record.headPitch  = pitch
+        record.headRoll   = roll
+        record.lookRegion = region
+        record.dwellMs    = dwellMs
+        if let t = transition {
+            // Reuse the existing marker fields so transitions are greppable
+            // in the stream / CSV without adding a separate channel.
+            record.markerLabel = "LOOK:\(t.from)->\(t.to)"
+            record.markerNotes = "dwell \(dwellMs)ms in \(t.from)"
+        }
+        return record
+    }
+
     // ── CSV header ───────────────────────────────────────────
 
     static var csvHeader: String {
@@ -130,8 +160,7 @@ struct TelemetryRecord: Codable, Sendable {
             "throttle", "brake", "clutch", "fuel",
             "eng_temp", "oil_temp", "oil_pressure", "turbo",
             "abs", "tc", "signal_l", "signal_r", "handbrake",
-            "gaze_x", "gaze_y", "gaze_z",
-            "pupil_l", "pupil_r", "blink",
+            "head_yaw", "head_pitch", "head_roll", "look_region", "dwell_ms",
             "analysis_label", "analysis_confidence",
             "marker_label", "marker_notes"
         ].joined(separator: ",")
@@ -160,8 +189,8 @@ struct TelemetryRecord: Codable, Sendable {
             f(throttle), f(brake), f(clutch), f(fuel),
             f(engTemp), f(oilTemp), f(oilPressure), f(turbo),
             b(absActive), b(tcActive), b(signalLeft), b(signalRight), b(handbrake),
-            f(gazeX), f(gazeY), f(gazeZ),
-            f(leftPupilDilation), f(rightPupilDilation), b(blinkDetected),
+            f(headYaw), f(headPitch), f(headRoll), s(lookRegion),
+            dwellMs.map(String.init) ?? "",
             s(analysisLabel), f(analysisConfidence),
             s(markerLabel), s(markerNotes)
         ].joined(separator: ",")
