@@ -3,9 +3,12 @@ import SwiftUI
 @main
 struct BeamNGHUDApp: App {
 
-    @StateObject private var receiver:   UDPReceiver   = .shared
-    @StateObject private var session:    SessionManager = SessionManager()
-    @StateObject private var visibility: HUDVisibility  = HUDVisibility()
+    @StateObject private var receiver:    UDPReceiver    = .shared
+    @StateObject private var session:     SessionManager = SessionManager()
+    @StateObject private var visibility:  HUDVisibility  = HUDVisibility()
+    @StateObject private var headTracker: HeadTracker    = HeadTracker()
+
+    @State private var immersionStyle: ImmersionStyle = .mixed
 
     var body: some Scene {
 
@@ -15,6 +18,7 @@ struct BeamNGHUDApp: App {
                 .environmentObject(receiver)
                 .environmentObject(session)
                 .environmentObject(visibility)
+                .environmentObject(headTracker)
                 .onAppear { receiver.start() }
         }
         .windowResizability(.contentSize)
@@ -33,5 +37,15 @@ struct BeamNGHUDApp: App {
         .windowResizability(.contentSize)
         .defaultSize(width: 480, height: 720)
         .windowStyle(.plain)  // no title bar — just the panel + grab bar
+
+        // ── Attention tracking immersive space (Phase 0) ─────
+        // Head-direction region tracking. NOTE: opening this dismisses other
+        // apps (Moonlight / PsychoPy) — see GAZE_TRACKING_PLAN.md.
+        ImmersiveSpace(id: "attention") {
+            AttentionImmersiveView()
+                .environmentObject(session)
+                .environmentObject(headTracker)
+        }
+        .immersionStyle(selection: $immersionStyle, in: .mixed)
     }
 }

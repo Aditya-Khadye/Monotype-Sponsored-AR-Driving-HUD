@@ -13,12 +13,13 @@ struct HUDWindowView: View {
     @EnvironmentObject var receiver:   UDPReceiver
     @EnvironmentObject var visibility: HUDVisibility
     @EnvironmentObject var session:    SessionManager
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         // Reading receiver.latest INSIDE the body makes the view
         // re-render whenever it changes (since UDPReceiver is @Published)
         let currentPacket = receiver.latest
-        
+
         HUDPanelView(packet: currentPacket)
             .environmentObject(visibility)
             .frame(
@@ -29,6 +30,16 @@ struct HUDWindowView: View {
                 if let pkt = newPacket {
                     session.ingestPacket(pkt)
                 }
+            }
+            // Always-available way back to the control panel.
+            .ornament(attachmentAnchor: .scene(.bottom)) {
+                Button {
+                    openWindow(id: "control")
+                } label: {
+                    Label("Control Panel", systemImage: "slider.horizontal.3")
+                }
+                .padding(10)
+                .glassBackgroundEffect()
             }
     }
 }
