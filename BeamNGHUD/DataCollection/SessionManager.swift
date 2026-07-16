@@ -156,6 +156,18 @@ final class SessionManager: ObservableObject {
         processRecord(record)
     }
 
+    // ── Ingest click-based gaze sample ───────────────────────
+
+    /// Called by `GazeClickManager` for every system tap on the gaze net
+    /// (carries gaze x/y) and every raw controller event (timing only).
+    func ingestGazeClick(x: Float?, y: Float?, kind: String, seq: UInt64) {
+        guard isRecording else { return }
+        let record = TelemetryRecord.gazeClick(
+            x: x, y: y, kind: kind, seq: seq, clock: clock
+        )
+        processRecord(record)
+    }
+
     // ── Internal pipeline ────────────────────────────────────
 
     private func processRecord(_ record: TelemetryRecord) {

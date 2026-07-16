@@ -56,6 +56,26 @@ stream ourselves (WebRTC preferred; low-latency RTSP fallback).
 | **Phase 2** | PsychoPy surface — stream window or reimplement stimuli natively | Me | what PsychoPy shows |
 | **Phase 3** | Post-hoc gaze-dot→region extractor, merged with live head data by timestamp | Me | C pilot recordings |
 
+## Addendum (July 2026): click-based gaze + OpenEye
+Lab direction (B. Sawyer / A. Giroux) adds two verified paths:
+- **Click-based gaze sampling (iTrace, github.com/TUM-HN/iTrace):** each click
+  discloses the gaze point to the looked-at app. High-rate clicks via Dwell
+  Control (0.05 s) or a turbo Bluetooth controller (8BitDo Pro 2) → live,
+  timestamped gaze coordinates in-app, no video analysis. Our implementation:
+  a near-transparent gaze-capture window covering the layout (so clicks never
+  leak into Moonlight), samples logged as a `gazeClick` telemetry source.
+  Verify on-device: transparent-view targetability, max click rate, dwell
+  fixation behavior.
+- **OpenEye (github.com/witlab-kaist/OpenEye, ETRA 2026):** Pupil Labs Neon
+  mounted inside the AVP via 3D-printed mount + calibration software —
+  research-grade gaze AND pupillometry while wearing the headset. Supersedes
+  the earlier "no external tracker possible" conclusion. Hardware-budget path.
+- Correction on record: `EyeTrackingProvider` (from a May session) was a
+  fabricated API; no eye provider exists in ARKit on visionOS.
+- Instrument stack: pointer+recording (Option C, works today) = safety net;
+  click-based = primary live instrument once bench-verified; OpenEye/Neon =
+  pupillometry path.
+
 ## Schema change (Phase 0)
 Replace in `TelemetryRecord.swift` + `mac_receiver.py` CSV:
 - remove: `gazeX/Y/Z`, `leftPupilDilation`, `rightPupilDilation`, `blinkDetected`

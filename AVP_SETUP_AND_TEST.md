@@ -1,6 +1,6 @@
 # Apple Vision Pro — Setup & Test Guide
 
-For anyone setting up or testing the Vision Pro side of the driving sim project (Amy, RAs, or anyone new to the headset). Companion to `SETUP.md`, which covers the full PC/Vision Pro/Mac Mini pipeline. This doc is scoped to the Vision Pro specifically: pairing it, deploying the app, verifying telemetry, and setting up gaze recording.
+For anyone setting up or testing the Vision Pro side of the driving sim project (Amy, RAs, or anyone new to the headset). This doc is scoped to the Vision Pro specifically: pairing it, deploying the app, verifying telemetry, and setting up gaze recording. (A companion `SETUP.md` covering the full PC/Vision Pro/Mac Mini pipeline is planned but not yet in the repo.)
 
 Repo: `Monotype-Sponsored-AR-Driving-HUD`
 
@@ -36,10 +36,10 @@ If you get a signing error, the Apple ID on the Mac needs to be added under Xcod
 
 This confirms the core pipeline (PC → Vision Pro → Mac Mini) is intact before running anything with a participant.
 
-1. On the Windows PC, launch BeamNG.drive and spawn a vehicle. Confirm OutGauge is pointed at the Vision Pro's current IP (Options → Other → Protocols → OutGauge UDP — see `SETUP.md` for full details if this needs configuring from scratch).
+1. On the Windows PC, launch BeamNG.drive and spawn a vehicle. Confirm OutGauge is pointed at the Vision Pro's current IP (Options → Other → Protocols → OutGauge UDP; the extension in `BeamNG_Side/outgauge.lua` has the setup notes if this needs configuring from scratch).
 2. On the Mac Mini, run the receiver:
    ```bash
-   cd ~/Downloads/BeamNGHUD_v3/MacMini
+   cd ~/Developer/BeamNGHUD/MacMini
    python3 mac_receiver.py
    ```
 3. On the Vision Pro, open the BeamNGHUD app and tap **Open HUD Window**. The UDP indicator in the control panel should turn green, and live speed/RPM/gear should appear on the HUD as you drive.
@@ -54,6 +54,7 @@ This is the current approach for capturing where the participant is looking (roa
 1. **Turn on the eye-pointer.** On the Vision Pro: Settings → Accessibility → Pointer Control → set the pointer to follow **Eyes**.
 2. **Make the pointer visible and distinct.** In the same menu, set the pointer to a large size and a solid, unusual color (bright magenta works well) so it's easy to isolate in the recording later.
 3. **Check dwell-click is off**, or set to a long enough delay that it won't fire accidentally while the participant is just looking around. This matters — if it's on a short dwell, looking at something for a moment could trigger an unintended tap.
+   *Exception:* click-based gaze-capture sessions (the "gaze net" mode, see the addendum in `GAZE_TRACKING_PLAN.md`) deliberately run Dwell Control at a short interval with the gaze-net window covering the layout — dwell **off** applies to pointer-recording sessions like the one described here. Don't "fix" the dwell setting mid-study without checking which mode is being run.
 4. **Lay out the windows** (Moonlight driving view, PsychoPy, HUD) in fixed positions before recording starts. The gaze analysis defines regions as fixed boxes in the video frame, so windows moving mid-session will throw off the region detection.
 5. **Start screen recording** before the driving session begins — either on-headset via Control Center, or by mirroring to a Mac/iPad and recording there.
 6. **Run a 2-minute validation pass** before any real session: deliberately look road → HUD → PsychoPy → road, stop the recording, and run it through the analysis scripts with `--overlay` to confirm the pointer is being detected reliably and landing in the right regions. Instructions for this are in `GazeAnalysis/README.md`.

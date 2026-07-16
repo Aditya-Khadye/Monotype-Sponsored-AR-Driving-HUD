@@ -6,7 +6,8 @@ struct BeamNGHUDApp: App {
     @StateObject private var receiver:    UDPReceiver    = .shared
     @StateObject private var session:     SessionManager = SessionManager()
     @StateObject private var visibility:  HUDVisibility  = HUDVisibility()
-    @StateObject private var headTracker: HeadTracker    = HeadTracker()
+    @StateObject private var headTracker: HeadTracker      = HeadTracker()
+    @StateObject private var gazeClicks:  GazeClickManager = GazeClickManager()
 
     @State private var immersionStyle: ImmersionStyle = .mixed
 
@@ -19,6 +20,7 @@ struct BeamNGHUDApp: App {
                 .environmentObject(session)
                 .environmentObject(visibility)
                 .environmentObject(headTracker)
+                .environmentObject(gazeClicks)
                 .onAppear { receiver.start() }
         }
         .windowResizability(.contentSize)
@@ -37,6 +39,17 @@ struct BeamNGHUDApp: App {
         .windowResizability(.contentSize)
         .defaultSize(width: 480, height: 720)
         .windowStyle(.plain)  // no title bar — just the panel + grab bar
+
+        // ── Gaze net — click-based gaze capture surface ──────
+        // Near-transparent window the experimenter stretches over the study
+        // layout; system taps land here with location = gaze point.
+        WindowGroup("Gaze Net", id: "gazeNet") {
+            GazeCaptureWindowView()
+                .environmentObject(session)
+                .environmentObject(gazeClicks)
+        }
+        .defaultSize(width: 1100, height: 700)
+        .windowStyle(.plain)
 
         // ── Attention tracking immersive space (Phase 0) ─────
         // Head-direction region tracking. NOTE: opening this dismisses other

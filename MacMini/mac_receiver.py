@@ -123,6 +123,7 @@ CSV_HEADER = [
     "eng_temp", "oil_temp", "oil_pressure", "turbo",
     "abs", "tc", "signal_l", "signal_r", "handbrake",
     "head_yaw", "head_pitch", "head_roll", "look_region", "dwell_ms",
+    "click_gaze_x", "click_gaze_y", "click_kind", "click_seq",
     "analysis_label", "analysis_confidence",
     "marker_label", "marker_notes",
 ]
@@ -154,6 +155,7 @@ def record_to_csv_row(rec: dict) -> list:
         g("absActive"), g("tcActive"), g("signalLeft"), g("signalRight"),
         g("handbrake"),
         g("headYaw"), g("headPitch"), g("headRoll"), g("lookRegion"), g("dwellMs"),
+        g("clickGazeX"), g("clickGazeY"), g("clickKind"), g("clickSeq"),
         g("analysisLabel"), g("analysisConfidence"),
         g("markerLabel"), g("markerNotes"),
     ]

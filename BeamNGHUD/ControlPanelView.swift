@@ -6,6 +6,7 @@ struct ControlPanelView: View {
     @EnvironmentObject var session:     SessionManager
     @EnvironmentObject var visibility:  HUDVisibility
     @EnvironmentObject var headTracker: HeadTracker
+    @EnvironmentObject var gazeClicks:  GazeClickManager
 
     @Environment(\.openWindow) var openWindow
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -38,6 +39,7 @@ struct ControlPanelView: View {
                     hudToggleSection
                     connectionSection
                     sessionSection
+                    gazeClickSection
                     attentionSection
                     visibilitySection
 
@@ -206,6 +208,55 @@ struct ControlPanelView: View {
                         .foregroundStyle(.red)
                         .monospacedDigit()
                 }
+            }
+        }
+        .padding(16)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    // ── Click-based gaze capture ─────────────────────────────
+
+    private var gazeClickSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Gaze Capture (clicks)", systemImage: "cursorarrow.click.2")
+                .font(.subheadline.weight(.semibold))
+            Text("System taps (pinch / dwell / controller A) land on the gaze net with their gaze location. L3/R3/Menu/Options log raw timing for the rate bench.")
+                .font(.caption2).foregroundStyle(.tertiary)
+
+            Button {
+                openWindow(id: "gazeNet")
+            } label: {
+                Label("Open Gaze Net", systemImage: "rectangle.dashed")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.indigo)
+
+            Toggle("Show net chrome (border + stats)", isOn: $gazeClicks.showChrome)
+                .font(.callout)
+
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(String(format: "taps %.0f/s", gazeClicks.tapRate))
+                        .font(.caption.monospacedDigit().weight(.semibold))
+                    Text("\(gazeClicks.totalTaps) total · last (\(Int(gazeClicks.lastTapLocation.x)), \(Int(gazeClicks.lastTapLocation.y)))")
+                        .font(.caption2.monospacedDigit()).foregroundStyle(.tertiary)
+                }
+                Spacer()
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(String(format: "raw %.0f/s", gazeClicks.rawRate))
+                        .font(.caption.monospacedDigit().weight(.semibold))
+                    Text("\(gazeClicks.totalRaw) total")
+                        .font(.caption2.monospacedDigit()).foregroundStyle(.tertiary)
+                }
+            }
+
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(gazeClicks.controllerName != nil ? .green : .orange)
+                    .frame(width: 7, height: 7)
+                Text(gazeClicks.controllerName ?? "no controller paired")
+                    .font(.caption).foregroundStyle(.secondary)
             }
         }
         .padding(16)

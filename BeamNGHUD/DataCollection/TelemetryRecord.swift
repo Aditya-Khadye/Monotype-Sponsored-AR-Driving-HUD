@@ -15,6 +15,7 @@ struct TelemetryRecord: Codable, Sendable {
     enum DataSource: String, Codable, Sendable {
         case outgauge       // BeamNG telemetry
         case headTracking   // Head-direction attention region (visionOS)
+        case gazeClick      // Click-based gaze sample (system tap = gaze point)
         case analysis       // CoreML analysis output
         case marker         // Manual event marker
     }
@@ -48,6 +49,15 @@ struct TelemetryRecord: Codable, Sendable {
     var headRoll: Float?     // roll degrees
     var lookRegion: String?  // "road" | "hud" | "psychopy" | "other"
     var dwellMs: UInt64?     // time in current region (or region just exited, on a transition)
+
+    // ── Click-based gaze sampling (iTrace-style) ─────────────
+    // A system tap (pinch / dwell / controller A) lands at the gaze point.
+    // x/y are in gaze-net window points; nil for raw controller events,
+    // which carry timing only (no gaze location).
+    var clickGazeX: Float?
+    var clickGazeY: Float?
+    var clickKind: String?   // "gazeTap" | "raw:<button>"
+    var clickSeq: UInt64?
 
     // ── Analysis flags (from CoreML) ─────────────────────────
     var analysisLabel: String?
@@ -151,6 +161,26 @@ struct TelemetryRecord: Codable, Sendable {
         return record
     }
 
+    // ── Factory: click-based gaze sample ─────────────────────
+
+    static func gazeClick(
+        x: Float?,
+        y: Float?,
+        kind: String,
+        seq: UInt64,
+        clock: SessionClock
+    ) -> TelemetryRecord {
+        var record = TelemetryRecord(
+            timestamp: clock.now(),
+            source: .gazeClick
+        )
+        record.clickGazeX = x
+        record.clickGazeY = y
+        record.clickKind  = kind
+        record.clickSeq   = seq
+        return record
+    }
+
     // ── CSV header ───────────────────────────────────────────
 
     static var csvHeader: String {
@@ -161,6 +191,7 @@ struct TelemetryRecord: Codable, Sendable {
             "eng_temp", "oil_temp", "oil_pressure", "turbo",
             "abs", "tc", "signal_l", "signal_r", "handbrake",
             "head_yaw", "head_pitch", "head_roll", "look_region", "dwell_ms",
+            "click_gaze_x", "click_gaze_y", "click_kind", "click_seq",
             "analysis_label", "analysis_confidence",
             "marker_label", "marker_notes"
         ].joined(separator: ",")
@@ -191,6 +222,8 @@ struct TelemetryRecord: Codable, Sendable {
             b(absActive), b(tcActive), b(signalLeft), b(signalRight), b(handbrake),
             f(headYaw), f(headPitch), f(headRoll), s(lookRegion),
             dwellMs.map(String.init) ?? "",
+            f(clickGazeX), f(clickGazeY), s(clickKind),
+            clickSeq.map(String.init) ?? "",
             s(analysisLabel), f(analysisConfidence),
             s(markerLabel), s(markerNotes)
         ].joined(separator: ",")
